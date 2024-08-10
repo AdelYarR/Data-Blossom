@@ -1,0 +1,4 @@
+bind_addr = "localhost:8000"
+
+[store]
+database_url = "postgres://postgres:rootroot@localhost:5432/language"
