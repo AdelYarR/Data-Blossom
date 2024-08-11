@@ -10,12 +10,12 @@ import (
 
 
 func main() {
-	apiconfig, err := api.NewConfig("C:/Users/user/Desktop/datablossom/configs/config.toml")
+	apiconfig, err := api.NewConfig("./configs/config.toml")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	dbconfig, err := config.NewConfig("C:/Users/user/Desktop/datablossom/configs/config.toml")
+	dbconfig, err := config.NewConfig("./configs/config.toml")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -27,8 +27,7 @@ func main() {
 
 	apiserver := api.New(apiconfig, db)
 
-	err = apiserver.Start()
-	if err != nil {
+	if err = apiserver.Start(); err != nil {
 		log.Fatal(err)
 	}
 }

@@ -51,7 +51,7 @@ func (repo *PGRepo) GetLanguages() ([]models.Languages, error) {
 }
 
 // Update
-func (repo *PGRepo) UpdateLanguage(id int, lang models.Languages) error {
+func (repo *PGRepo) UpdateLanguage(id string, lang models.Languages) error {
 	_, err := repo.pool.Exec(context.Background(), `
 		UPDATE languages SET name = $1, type_id = $2
 		WHERE id = $3`,
@@ -67,10 +67,10 @@ func (repo *PGRepo) UpdateLanguage(id int, lang models.Languages) error {
 }
 
 // Delete
-func (repo *PGRepo) DeleteLanguage(name string) error {
+func (repo *PGRepo) DeleteLanguage(id string) error {
 	_, err := repo.pool.Exec(context.Background(), `
-		DELETE FROM languages WHERE name = $1;`,
-		name,
+		DELETE FROM languages WHERE id = $1;`,
+		id,
 	)
 	if err != nil {
 		return err

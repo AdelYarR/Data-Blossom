@@ -10,8 +10,7 @@ type Config struct {
 
 func NewConfig(configPath string) (*Config, error) {
 	var cfg Config
-	_, err := toml.DecodeFile(configPath, &cfg)
-	if err != nil {
+	if _, err := toml.DecodeFile(configPath, &cfg); err != nil {
 		return nil, err
 	}
 

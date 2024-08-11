@@ -3,7 +3,6 @@ package api
 import (
 	"encoding/json"
 	"net/http"
-	"strconv"
 
 	"github.com/gorilla/mux"
 
@@ -44,7 +43,7 @@ func (s *APIServer) languageHandler(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		id, ok := vars["id"]
 		if !ok {
-			s.logger.Error("Failed to decode")
+			s.logger.Error("Failed to get ID")
 			return
 		}
 
@@ -53,28 +52,22 @@ func (s *APIServer) languageHandler(w http.ResponseWriter, r *http.Request) {
 			s.logger.Error("Failed to decode")
 			return
 		}
-
-		id_, err := strconv.Atoi(id)
+		
+		err = s.db.UpdateLanguage(id, lang)
 		if err != nil {
-			s.logger.Error("Failed to decode")
-			return
-		}
-
-		err = s.db.UpdateLanguage(id_, lang)
-		if err != nil {
-			s.logger.Error("Unsuccessful DELETE")
+			s.logger.Error("Unsuccessful UPDATE")
 			return
 		}
 
 	case http.MethodDelete:
 		vars := mux.Vars(r)
-		name, ok := vars["name"]
+		id, ok := vars["id"]
 		if !ok {
-			s.logger.Error("Failed to decode")
+			s.logger.Error("Failed to get ID")
 			return
 		}
 
-		err := s.db.DeleteLanguage(name)
+		err := s.db.DeleteLanguage(id)
 		if err != nil {
 			s.logger.Error("Unsuccessful DELETE")
 			return
