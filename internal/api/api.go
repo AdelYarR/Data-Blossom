@@ -38,6 +38,9 @@ func (s *APIServer) Start() error {
 
 func (s *APIServer) Handle() {
 	s.router.HandleFunc("/api/lang", s.languageHandler).Methods(http.MethodGet)
+	s.router.HandleFunc("/api/lang", s.languageHandler).Methods(http.MethodPost)
+	s.router.HandleFunc("/api/lang", s.languageHandler).Methods(http.MethodDelete).Queries("name", "{name}")
+	s.router.HandleFunc("/api/lang", s.languageHandler).Methods(http.MethodPut).Queries("id", "{id}")
 
 	s.router.Use(s.middleware)
 }

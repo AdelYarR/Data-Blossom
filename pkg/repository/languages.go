@@ -7,20 +7,18 @@ import (
 )
 
 // Create
-func (repo *PGRepo) NewLanguage(item models.Languages) (models.Languages, error) {
-	var newLanguage models.Languages
-	err := repo.pool.QueryRow(context.Background(), `
+func (repo *PGRepo) NewLanguage(item models.Languages) error {
+	_, err := repo.pool.Exec(context.Background(), `
 		INSERT INTO languages (name, type_id) 
-		VALUES ($1, $2) 
-		RETURNING id, name, type_id;`,
+		VALUES ($1, $2);`,
 		item.Name,
 		item.TypeID,
-	).Scan(&newLanguage.ID, &newLanguage.Name, &newLanguage.TypeID)	
+	)
 	if err != nil {
-		return models.Languages{}, err
+		return err
 	}
 
-	return newLanguage, nil
+	return nil
 }
 
 // Read
@@ -53,22 +51,30 @@ func (repo *PGRepo) GetLanguages() ([]models.Languages, error) {
 }
 
 // Update
-// func (repo *PGRepo) UpdateLanguageById() (models.Languages, error) {
-	
-// }
-
-// Delete
-func (repo *PGRepo) DeleteLanguageById(item models.Languages) (models.Languages, error) {
-	var newLanguage models.Languages
-	err := repo.pool.QueryRow(context.Background(), `
-		DELETE FROM languages WHERE name = $1 && type_id = $2 
-		RETURNING id, name, type_id;`,
-		item.Name,
-		item.TypeID,
-	).Scan(&newLanguage.ID, &newLanguage.Name, &newLanguage.TypeID)	
+func (repo *PGRepo) UpdateLanguage(id int, lang models.Languages) error {
+	_, err := repo.pool.Exec(context.Background(), `
+		UPDATE languages SET name = $1, type_id = $2
+		WHERE id = $3`,
+		lang.Name,
+		lang.TypeID,
+		id,
+	)
 	if err != nil {
-		return models.Languages{}, err
+		return err
 	}
 
-	return newLanguage, nil
+	return nil
+}
+
+// Delete
+func (repo *PGRepo) DeleteLanguage(name string) error {
+	_, err := repo.pool.Exec(context.Background(), `
+		DELETE FROM languages WHERE name = $1;`,
+		name,
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

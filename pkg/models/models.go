@@ -1,9 +1,9 @@
 package models
 
 type Languages struct {
-	ID     int
-	Name   string
-	TypeID int
+	ID     int `json:"id"`
+	Name   string `json:"name"`
+	TypeID int `json:"type_id"`
 }
 
 type Types struct {
